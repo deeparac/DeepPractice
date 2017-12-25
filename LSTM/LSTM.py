@@ -17,7 +17,16 @@ def params_gen(input_size, num_units):
         'h2h_bias': h2h_bias
     }
     return params
-    
+
+def grad_clipping(params, theta):
+    norm = mx.nd.array([0.0], ctx=mx.gpu())
+    for param in params:
+        norm += nd.sum(param.grad ** 2)
+    norm = nd.sqrt(norm).asscalar()
+    if norm > thata:
+        for param in params:
+            param.grad[:] *= theta / norm
+
 class LSTM(gluon.nn.Block):
     def __init__(self, input_size, num_units, data,
                  prev_state, params, ctx=mx.gpu(), **kwargs):
