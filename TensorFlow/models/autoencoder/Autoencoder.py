@@ -46,15 +46,18 @@ class Autoencoder(object):
 		self.weights['b1'] = tf.Variable(tf.zeros([self.n_hidden]), dtype=tf.float32)
 		self.weights['b2'] = tf.Variable(tf.zeros([self.n_input]), dtype=tf.float32)
 
+	def feed_dict(self, X):
+		return {self.x: X)
+
 	def partial_fit(self, X):
-		cost, _ = self.sess.run([self.cost, self.optimizer], feed_dict={self.x: X})
+		cost, _ = self.sess.run([self.cost, self.optimizer], feed_dict=feed_dict(X))
 		return cost
 	
 	def calc_total_cost(self, X):
-		return self.sess.run(self.cost, feed_dict={self.x: X})
+		return self.sess.run(self.cost, feed_dict=feed_dict(X))
 	
 	def transform(self, X):
-		return self.sess.run(self.hidden, feed_dict={self.x: X})
+		return self.sess.run(self.hidden, feed_dict=feed_dict(X))
 	
 	def generate(self, hidden=None):
 		if hidden is None:
@@ -62,7 +65,7 @@ class Autoencoder(object):
 		return self.sess.run(self.reconstruction, feed_dict={self.hidden: hidden})
 	
 	def reconstruct(self, X):
-		return self.sess.run(self.reconstruction, feed_dict={self.x: X})
+		return self.sess.run(self.reconstruction, feed_dict=feed_dict(X))
 	
 	def getWeights(self):
 		return self.sess.run(self.weights['w1'])
